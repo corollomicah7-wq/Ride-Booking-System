@@ -24,7 +24,7 @@ class Booking_Manager:
             with open(self.filename, "r") as f:
                 for line in f:
                     data = line.strip().split(",")
-                    bookinf_id, user, vehicle_type, start, end, distance, passengers, total_cost = data
+                    booking_id, user, vehicle_type, start, end, distance, passengers, total_cost = data
                     booking = Booking(booking_id, user, vehicle_type, start, end, float(distance), int(passengers))
                     self.bookings.append(booking)
         except File_Not_Found_Error:
