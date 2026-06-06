@@ -1,35 +1,39 @@
 class Vehicle:
     def __init__(self, vehicle_type, cost_per_mile, capacity):
-        self.vehicle_type = vehicle_type
-        self.cost_per_mile = cost_per_mile
-        self.capacity = capacity
+        self._vehicle_type = vehicle_type
+        self._cost_per_mile = cost_per_mile
+        self._capacity = capacity
 
     def calculate_cost(self, distance):
-        return self.cost_per_mile * distance
-    
+        return distance * self._cost_per_mile
+
     def get_type(self):
-        return self.vehicle_type
-    
+        return self._vehicle_type
+
     def get_capacity(self):
-        return self.capacity
-    
+        return self._capacity
+
 class Car(Vehicle):
-    def __init__(self, cost_per_mile, capacity):
-        super().__init__('Car', 10, 4)
+    def __init__(self):
+        super().__init__("Car", cost_per_mile=12, capacity=4)
 
     def calculate_cost(self, distance):
-        return 20 + (distance * 10)
-    
+        base_cost = super().calculate_cost(distance)
+        luxury_tax = 20
+        return base_cost + luxury_tax
+
 class Van(Vehicle):
-    def __init__(self, cost_per_mile, capacity):
-        super().__init__('Van', 15, 12)
+    def __init__(self):
+        super().__init__("Van", cost_per_mile=18, capacity=12)
 
     def calculate_cost(self, distance):
-        return 50 + (distance * 15)
-    
+        base_cost = super().calculate_cost(distance)
+        service_fee = 50
+        return base_cost + service_fee
+
 class Bike(Vehicle):
-    def __init__(self, cost_per_mile, capacity):
-        super().__init__('Bike', 5, 1)
+    def __init__(self):
+        super().__init__("Bike", cost_per_mile=5, capacity=1)
 
     def calculate_cost(self, distance):
-        return distance * 5
+        return super().calculate_cost(distance)
