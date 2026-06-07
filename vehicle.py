@@ -36,4 +36,4 @@ class Bike(Vehicle):
         super().__init__("Bike", cost_per_mile=5, capacity=1)
 
     def calculate_cost(self, distance):
-        return super().calculate_cost(distance)
+        return distance * self._cost_per_mile
