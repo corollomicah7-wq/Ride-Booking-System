@@ -34,6 +34,8 @@ class bookingapp:
         root.geometry("1000x650")
         self._setup_styles()
         self.create_widgets()
+        self.next_id = 1
+        self.bookings = []
 
     def _setup_styles(self):
         s = ttk.Style(); s.theme_use("clam")
