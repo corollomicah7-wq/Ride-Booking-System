@@ -16,10 +16,3 @@ def calc_cost(start, end, vehicle_type):
     except Exception as e:
         print(f"Could not calculate distance/cost: {e}")
         return 0, 0
-
-class Bike(Vehicle):
-    def __init__(self):
-        super().__init__("Bike", cost_per_mile=5, capacity=1)
-
-    def calculate_cost(self, distance):
-        return distance * self._cost_per_mile
