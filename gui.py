@@ -2,29 +2,12 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 
 
-from vehicle import VEHICLES
-from distance_service import distance_between_cities
+from vehicle import VEHICLES, calc_cost
 # Palette 
 BG   = "#0D0F14"; PANEL = "#161B24"; INP = "#1E2533"
 TEA  = "#00E5C3"; RED   = "#FF4D6A"; TXT = "#E8ECF2"; MUT = "#6B7A99"
 RODD = "#161B24"; REVEN = "#1A2030"
 
-
-def calc_cost(start, end, vehicle_type):
-    try:
-        dist = distance_between_cities(start, end)
-        if vehicle_type == "Car🚙":
-            cost = 20 + (dist * 10)
-        elif vehicle_type == "Van 🚐":
-            cost = 50 + (dist * 15)
-        elif vehicle_type == "Motorcycle 🏍":
-            cost = dist * 5
-        else:
-            raise ValueError("Invalid vehicle type.")
-        return dist, cost
-    except Exception as e:
-        print(f"Could not calculate distance/cost: {e}")
-        return 0, 0
 # App
 class bookingapp:
     def __init__(self, root):
