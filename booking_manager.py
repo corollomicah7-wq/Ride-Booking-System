@@ -1,8 +1,8 @@
-from booking import Booking
+from Booking import Booking
 
 
 class BookingManager:
-    def __init__(self, filename="bookings.txt"):
+    def __init__(self, filename="Bookings.txt"):
         self.bookings = []
         self.filename = filename
         self.load_bookings()
