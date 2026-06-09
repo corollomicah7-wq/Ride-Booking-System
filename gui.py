@@ -72,7 +72,7 @@ class RideBookingApp:
         tk.Label(parent, text=text, bg=PANEL, fg=MUT,
                  font=("Segoe UI", 8, "bold"), anchor="w").pack(fill="x", padx=20, pady=(8,2))
 
-    # ── Homepage / Welcome Widgets ───────────────────────────────────────────
+    # Welcome Widgets
     def create_welcome_widgets(self):
         center_panel = tk.Frame(self.welcome_frame, bg=PANEL, padx=40, pady=50)
         center_panel.place(relx=0.5, rely=0.5, anchor="center")
@@ -87,7 +87,7 @@ class RideBookingApp:
         
         self._btn(center_panel, "BOOK A RIDE  →", self.show_main_system, bg=TEA, fg=BG).pack(ipadx=20, ipady=4)
 
-    # ── Main Widgets Setup ───────────────────────────────────────────────────
+    # Widgets Setup for Main App
     def create_widgets(self):
         # Header 
         h = tk.Frame(self.main_app_frame, bg=BG, height=56); h.pack(fill="x"); h.pack_propagate(False)
@@ -109,7 +109,7 @@ class RideBookingApp:
         self._build_records_page()
         self._form_page.pack(fill="both", expand=True)
 
-    # ── Form page ─────────────────────────────────────────────────────────────
+    # Form page 
     def _build_form_page(self):
         self._form_page = tk.Frame(self._container, bg=BG)
 
@@ -153,14 +153,14 @@ class RideBookingApp:
         self._veh_name_lbl = tk.Label(veh_details, text="", bg="#0D1A26", fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w")
         self._veh_name_lbl.pack(fill="x")
         
-        # --- DITO ANG PAGBABAGO PARA SA DROPDOWN CAPACITY ---
+       # Capacity dropdown setup
         cap_frame = tk.Frame(veh_details, bg="#0D1A26")
         cap_frame.pack(fill="x")
         
-        # Text label sa kaliwa ng dropdown
+        # Capacity label
         tk.Label(cap_frame, text="👤 Capacity: ", bg="#0D1A26", fg=GOLD, font=("Segoe UI", 9)).pack(side="left")
         
-        # Ang tamang Combobox setup para sa dropdown selection
+        # Capacity dropdown
         self._capacity_var = tk.StringVar()
         self._capacity_combo = ttk.Combobox(cap_frame, textvariable=self._capacity_var, state="readonly", width=6, font=("Segoe UI", 9))
         self._capacity_combo.pack(side="left", padx=5)
@@ -243,7 +243,7 @@ class RideBookingApp:
         tk.Label(bot, text="Click ←  NEW BOOKING to go back and book another ride.",
                  bg=PANEL, fg=MUT, font=("Segoe UI", 8)).pack(side="left", padx=6)
 
-    # ── Page switching ────────────────────────────────────────────────────────
+    # Page switching 
     def show_welcome_page(self):
         self.main_app_frame.pack_forget()
         self.welcome_frame.pack(fill="both", expand=True)
@@ -265,7 +265,7 @@ class RideBookingApp:
         self._records_page.pack(fill="both", expand=True)
         self.root.geometry("650x650")
 
-    # ── Methods ───────────────────────────────────────────────────────────────
+    # Methods 
     def book_ride(self):
         name  = self._e_name.get().strip()
         start = self._start_var.get().strip()
