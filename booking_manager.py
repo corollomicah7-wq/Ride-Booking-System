@@ -1,17 +1,18 @@
 from booking import Booking
 
-class Booking_Manager:
-    def __init__(self, filename = "bookings.txt"):
+
+class BookingManager:
+    def __init__(self, filename="bookings.txt"):
         self.bookings = []
         self.filename = filename
         self.load_bookings()
 
-    def add_booking(self, booking):
+    def add_booking(self, booking: Booking):
         self.bookings.append(booking)
         self.save_bookings()
 
     def cancel_booking(self, booking_id):
-        self.bookings = [b for b in self.bookings if b.booking_id != booking_id]
+        self.bookings = [b for b in self.bookings if str(b.booking_id) != str(booking_id)]
         self.save_bookings()
 
     def save_bookings(self):
@@ -23,9 +24,16 @@ class Booking_Manager:
         try:
             with open(self.filename, "r") as f:
                 for line in f:
-                    data = line.strip().split(",")
-                    booking_id, user, vehicle_type, start, end, distance, passengers, total_cost = data
-                    booking = Booking(booking_id, user, vehicle_type, start, end, float(distance), int(passengers))
-                    self.bookings.append(booking)
-        except File_Not_Found_Error:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    parts = line.split(",")
+                    if len(parts) < 7:
+                        continue
+                    booking_id, user, vehicle_type, start, end, distance = parts[:6]
+                    passengers = parts[6] if len(parts) > 6 else "1"
+                    b = Booking(booking_id, user, vehicle_type, start, end,
+                                float(distance), int(passengers))
+                    self.bookings.append(b)
+        except FileNotFoundError:
             pass
