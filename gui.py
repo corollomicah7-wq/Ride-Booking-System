@@ -248,126 +248,143 @@ class RideBookingApp:
         tk.Label(bot, text="Click ←  NEW BOOKING to go back and book another ride.",
                  bg=PANEL, fg=MUT, font=("Segoe UI", 8)).pack(side="left", padx=6)
         
+        
     def _build_portfolio_page(self):
         self._portfolio_page = tk.Frame(self._container, bg=BG)
 
         card = tk.Frame(self._portfolio_page, bg=PANEL)
         card.pack(fill="both", expand=True, padx=24, pady=16)
 
-        # Header Title
+    # Header Title
         tk.Frame(card, bg=TEA, width=4, height=20).place(x=18, y=18)
         tk.Label(card, text="  GROUP PORTFOLIO", bg=PANEL, fg=TXT,
-                 font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18,4))
-        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0,10)) 
+             font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18, 4))
+        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0, 10))
 
-        #Scrollbar
+    # ── Bottom section (detail box + back button) packed FIRST so it stays fixed ──
+        self._btn(card, "←  BACK TO BOOKING", self.show_booking_form,
+              bg=TEA, fg=BG).pack(fill="x", side="bottom", padx=20, pady=(0, 2))
+        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", side="bottom", padx=18, pady=(0, 10))
+
+        self._detail_box = tk.Frame(card, bg="#7E0404", padx=15, pady=12)
+        self._detail_box.pack(side="bottom", fill="x", padx=18, pady=(5, 10))
+
+        self._p_title = tk.Label(self._detail_box, text="💡 Click a member to view full profile",
+                             bg="#7E0404", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
+        self._p_title.pack(fill="x", pady=(0, 4))
+
+        self._p_info = tk.Label(self._detail_box, text="", bg="#7E0404", fg=TXT,
+                            font=("Segoe UI", 9), anchor="w", justify="left")
+        self._p_info.pack(fill="x")
+
+    #Scrollbar
         wrapper = tk.Frame(card, bg=PANEL)
-        wrapper.pack(fill="both", expand=True, padx=18, pady=(0,6))
+        wrapper.pack(fill="both", expand=True, padx=18, pady=(0, 6))
 
-        canvas = tk.Canvas(wrapper, bg=PANEL, highligtthickness=0)
+        canvas = tk.Canvas(wrapper, bg=PANEL, highlightthickness=0)
         scrollbar = tk.Scrollbar(wrapper, orient="vertical", command=canvas.yview)
         canvas.configure(yscrollcommand=scrollbar.set)
 
         scrollbar.pack(side="right", fill="y")
-        canvas.pack(side="left", fill=" both", expand=True)
+        canvas.pack(side="left", fill="both", expand=True)
 
         inner = tk.Frame(canvas, bg=PANEL)
-        inner_window = canvas.create_window((0,0), window=inner, anchor="nw")
+        inner_window = canvas.create_window((0, 0), window=inner, anchor="nw")
 
-        #keep inner frame width sync with canvas
+    # Keep inner frame width in sync with canvas
         def _on_canvas_resize(event):
             canvas.itemconfig(inner_window, width=event.width)
         canvas.bind("<Configure>", _on_canvas_resize)
 
-        #Update scrollregion when inner frame content changes
-        inner.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-        
-        #mouse-wheel scrolling
+    # Update scrollregion when inner frame content changes
+        inner.bind("<Configure>", lambda e: canvas.configure(
+        scrollregion=canvas.bbox("all")))
+
+    # Mouse-wheel scrolling
         def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1 * (event.delta / 120 )), "units")
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
-             # Bind only when mouse is over the canvas area
-            canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
-            canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+    # Bind only when mouse is over the canvas area
+        canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
+        canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
+    
 
-        # Data of each member
+    # Member data
         members = [
             {
-                "NAME": "Reian A. Fortunado", 
-                "ROLE": "OOP Developer/vehicle.py file", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "1st-year Computer Engineering student who chose this program and doesn't want to be anywhere else but here."
+            "NAME": "Reian A. Fortunado",
+            "ROLE": "OOP Developer/vehicle.py file",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "1st-year Computer Engineering student who chose this program and doesn't want to be anywhere else but here."
             },
             {
-                "NAME": "Gwynn O. Magpantay", 
-                "ROLE": " OOP Developer/Booking.py file", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "Babay Comp eng hello HM"
+            "NAME": "Gwynn O. Magpantay",
+            "ROLE": "OOP Developer/Booking.py file",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "Babay Comp eng hello HM"
             },
             {
-                "NAME": "Karl Abijah F. Morato", 
-                "ROLE": "OOP Developer/Booking_manager.py file", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "CTRL-Z is life"
+            "NAME": "Karl Abijah F. Morato",
+            "ROLE": "OOP Developer/Booking_manager.py file",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "CTRL-Z is life"
             },
             {
-                "NAME": "Denver James P. Quizan", 
-                "ROLE": "OOP Developer/gui.py file", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "Don't give up on your dreams keep sleeping."
+            "NAME": "Denver James P. Quizan",
+            "ROLE": "OOP Developer/gui.py file",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "Don't give up on your dreams keep sleeping."
             },
             {
-                "NAME": "Kirby Renzo F. Jardio", 
-                "ROLE": "Developer", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "Sacrifice the pawn to control the board" 
+            "NAME": "Kirby Renzo F. Jardio",
+            "ROLE": "Developer",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "Sacrifice the pawn to control the board"
             },
             {
-                "NAME": "Micah L. Corollo", 
-                "ROLE": "OOP Testing/Adjusting", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "See u in 2nd Yr"
+            "NAME": "Micah L. Corollo",
+            "ROLE": "OOP Testing/Adjusting",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "See u in 2nd Yr"
             },
             {
-                "NAME": "Reian A. Fortunado", 
-                "ROLE": "OOP Developer/vehicle.py file", 
-                "SECTION": "BSCpE 1-5",
-                "BIO": "dfrfr"
-            }   
+            "NAME": "Reian A. Fortunado",
+            "ROLE": "OOP Developer/vehicle.py file",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "dfrfr"
+            }
         ]
-
-        # Detail panel
-        self._detail_box = tk.Frame(card, bg="#7E0404", padx=15, pady=12)
-        self._detail_box.pack(side="bottom", fill="x", padx=18, pady=(5, 10))
-        
-        # Title
-        self._p_title = tk.Label(self._detail_box, text="💡 Click a member to view full profile", 
-                                 bg="#7E0404", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
-        self._p_title.pack(fill="x", pady=(0, 4))
 
         def on_member_select(member_data):
             self._p_title.config(text=f"👤 {member_data['NAME'].upper()} — {member_data['ROLE']}")
             self._p_info.config(text=f"{member_data['SECTION']}\n\n{member_data['BIO']}")
 
+    # Build member cards inside 'inner' scrollable
         for m in members:
-            m_frame = tk.Frame(card, bg=INP, padx=15, pady=8, cursor="hand2")
-            m_frame.pack(fill="x", padx=18, pady=4)
-            
-            lbl_NAME = tk.Label(m_frame, text=m["NAME"], bg=INP, fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w", cursor="hand2")
+            m_frame = tk.Frame(inner, bg=INP, padx=15, pady=8, cursor="hand2")
+            m_frame.pack(fill="x", pady=4)
+
+            lbl_NAME = tk.Label(m_frame, text=m["NAME"], bg=INP, fg=TXT,
+                            font=("Segoe UI", 10, "bold"), anchor="w", cursor="hand2")
             lbl_NAME.pack(fill="x")
-            
-            lbl_ROLE = tk.Label(m_frame, text=m["ROLE"], bg=INP, fg=TEA, font=("Segoe UI", 8), anchor="w", cursor="hand2")
+
+            lbl_ROLE = tk.Label(m_frame, text=m["ROLE"], bg=INP, fg=TEA,
+                            font=("Segoe UI", 8), anchor="w", cursor="hand2")
             lbl_ROLE.pack(fill="x")
 
-            m_frame.bind("<Button-1>", lambda e, data=m: on_member_select(data))
-            lbl_NAME.bind("<Button-1>", lambda e, data=m: on_member_select(data))
-            lbl_ROLE.bind("<Button-1>", lambda e, data=m: on_member_select(data))
+        # Click to view profile
+            for widget in (m_frame, lbl_NAME, lbl_ROLE):
+                widget.bind("<Button-1>", lambda e, data=m: on_member_select(data))
+        
+            def on_enter(e, f=m_frame, n=lbl_NAME, r=lbl_ROLE):
+                f.config(bg="#252D3D"); n.config(bg="#252D3D"); r.config(bg="#252D3D")
+            def on_leave(e, f=m_frame, n=lbl_NAME, r=lbl_ROLE):
+                f.config(bg=INP); n.config(bg=INP); r.config(bg=INP)
 
-            def on_enter(e, f=m_frame): f.config(bg="#252D3D")
-            def on_leave(e, f=m_frame): f.config(bg=INP)
-            m_frame.bind("<Enter>", on_enter); m_frame.bind("<Leave>", on_leave)
-            lbl_NAME.bind("<Enter>", on_enter); lbl_NAME.bind("<Leave>", on_leave)
-            lbl_ROLE.bind("<Enter>", on_enter); lbl_ROLE.bind("<Leave>", on_leave)
+            for widget in (m_frame, lbl_NAME, lbl_ROLE):
+                widget.bind("<Enter>", on_enter)
+                widget.bind("<Leave>", on_leave)
+
 
         # Bottom navigation elements
         tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", side="bottom", padx=18, pady=(0, 10))
