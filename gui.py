@@ -47,10 +47,11 @@ class RideBookingApp:
         s.configure("T.Treeview.Heading", background=INP, foreground=TEA,
                     relief="flat", font=("Segoe UI", 9, "bold"))
         s.map("T.Treeview", background=[("selected", "#1E3040")])
-        s.configure("TCombobox", fieldbackground=INP, background=INP,
-                    foreground=TXT, arrowcolor=TEA, selectbackground=INP, selectforeground=TXT)
-        s.map("TCombobox", fieldbackground=[("readonly", INP)],
-              selectbackground=[("readonly", INP)], selectforeground=[("readonly", TXT)])
+        s.configure("TCombobox", fieldbackground="#FFFFFF", background=INP,
+                    foreground="#000000", arrowcolor=TEA, selectbackground="#FFFFFF", selectforeground="#000000")
+        s.map("TCombobox", fieldbackground=[("readonly", "#FFFFFF")],
+              foreground=[("readonly", "#000000")],
+              selectbackground=[("readonly", "#FFFFFF")], selectforeground=[("readonly", "#000000")])
 
     def _combo(self, parent, values, var):
         f = tk.Frame(parent, bg=TEA)
@@ -69,7 +70,7 @@ class RideBookingApp:
         return b
 
     def _flabel(self, parent, text):
-        tk.Label(parent, text=text, bg=PANEL, fg=MUT,
+        tk.Label(parent, text=text, bg=PANEL, fg="#FFFFFF",
                  font=("Segoe UI", 8, "bold"), anchor="w").pack(fill="x", padx=20, pady=(8,2))
 
     # Welcome Widgets
@@ -125,8 +126,8 @@ class RideBookingApp:
 
         self._flabel(card, "PASSENGER NAME")
         nf = tk.Frame(card, bg=TEA); tk.Frame(nf, bg=TEA, width=3).pack(side="left", fill="y")
-        self._e_name = tk.Entry(nf, bg=INP, fg=TXT, relief="flat", 
-                                font=("Segoe UI", 10), insertbackground=TXT, bd=6)
+        self._e_name = tk.Entry(nf, bg="#FFFFFF", fg="#000000", relief="flat", 
+                                font=("Segoe UI", 10), insertbackground="#000000", bd=6)
         self._e_name.pack(side="left", fill="both", expand=True)
         nf.pack(fill="x", padx=20)
 
@@ -146,16 +147,17 @@ class RideBookingApp:
         # Vehicle info panel
         self._veh_info = tk.Frame(card, bg="#FFFFFF", padx=12, pady=8)
         
-        self._veh_emoji_lbl = tk.Label(self._veh_info, text="", bg="#000000", fg=TXT, font=("Segoe UI", 20))
+        self._veh_emoji_lbl = tk.Label(self._veh_info, text="", bg="#FFFFFF", fg="#000000", font=("Segoe UI", 20))
         self._veh_emoji_lbl.pack(side="left", padx=(0, 10))
         
         veh_details = tk.Frame(self._veh_info, bg="#FFFFFF")
         veh_details.pack(side="left", fill="x", expand=True)
         
-        self._veh_name_lbl = tk.Label(veh_details, text="", bg="#FFFFFF", fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w")
+        # FIX: Changed fg from TXT (#FFFFFF) to "#000000" so it's fully visible on the white panel!
+        self._veh_name_lbl = tk.Label(veh_details, text="", bg="#FFFFFF", fg="#000000", font=("Segoe UI", 10, "bold"), anchor="w")
         self._veh_name_lbl.pack(fill="x")
         
-       # Capacity dropdown setup
+        # Capacity dropdown setup
         cap_frame = tk.Frame(veh_details, bg="#FFFFFF")
         cap_frame.pack(fill="x")
         
@@ -181,14 +183,14 @@ class RideBookingApp:
 
         # View records button
         self._btn(self._form_page, "☰  VIEW BOOKING RECORDS", self.show_records,
-                  bg="#1E2D3D", fg=TEA).pack(fill="x", padx=24, pady=(4, 16))
+                  bg="#DC6D06", fg=BG).pack(fill="x", padx=24, pady=(4, 16))
 
     def _on_vehicle_change(self, event=None):
         label = self._veh.get()
         vtype = VEHICLE_LABELS.get(label)
         vobj  = VEHICLES.get(vtype) if vtype else None
         if not vobj:
-            self._veh_info.pack_forget() # Itatago ang buong panel kasama ang capacity dropdown
+            self._veh_info.pack_forget() 
             return
         
         if hasattr(self, '_divider'):
@@ -200,7 +202,9 @@ class RideBookingApp:
         
         options = vobj.get_capacity_options()
         self._veh_emoji_lbl.config(text=vobj._emoji)
-        self._veh_name_lbl.config(text=vobj.get_type())
+        
+        # Dynamically updates the category name (e.g., MOTORCYCLE, CAR, VAN)
+        self._veh_name_lbl.config(text=vobj.get_type().upper())
         self._veh_rate_lbl.config(text=f"₱{vobj.get_base_fare():.0f} base  +  ₱{vobj.get_rate():.0f}/km")
         
         self._capacity_combo.config(values=options)
@@ -277,41 +281,36 @@ class RideBookingApp:
         ]
 
         # Detail panel
-        self._detail_box = tk.Frame(card, bg="#0D1A26", padx=15, pady=12)
+        self._detail_box = tk.Frame(card, bg="#7E0404", padx=15, pady=12)
         self._detail_box.pack(side="bottom", fill="x", padx=18, pady=(5, 10))
         
         # Title
         self._p_title = tk.Label(self._detail_box, text="💡 Click a member to view full profile", 
-                                 bg="#0D1A26", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
+                                 bg="#7E0404", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
         self._p_title.pack(fill="x", pady=(0, 4))
         
         self._p_info = tk.Label(self._detail_box, text="Select any developer card above to load their system profile and project contributions dynamically inside this widget.", 
-                                bg="#0D1A26", fg=TXT, font=("Segoe UI", 9), anchor="w", justify="left", wraplength=420)
+                                bg="#7E0404", fg=TXT, font=("Segoe UI", 9), anchor="w", justify="left", wraplength=420)
         self._p_info.pack(fill="x")
 
-        # 
         def on_member_select(member_data):
-            # Binabago natin ang config (.config) ng mga widgets sa ibaba imbis na mag-popup window
             self._p_title.config(text=f"👤 {member_data['NAME'].upper()} — {member_data['ROLE']}")
             self._p_info.config(text=member_data['SECTION'])
 
-        # 
         for m in members:
             m_frame = tk.Frame(card, bg=INP, padx=15, pady=8, cursor="hand2")
             m_frame.pack(fill="x", padx=18, pady=4)
             
-            lbl_NAME = tk.Label(m_frame, text=m["NAME"], bg=INP, fg=TEA, font=("Segoe UI", 10, "bold"), anchor="w", cursor="hand2")
+            lbl_NAME = tk.Label(m_frame, text=m["NAME"], bg=INP, fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w", cursor="hand2")
             lbl_NAME.pack(fill="x")
             
-            lbl_ROLE = tk.Label(m_frame, text=m["ROLE"], bg=INP, fg=MUT, font=("Segoe UI", 8), anchor="w", cursor="hand2")
+            lbl_ROLE = tk.Label(m_frame, text=m["ROLE"], bg=INP, fg=TEA, font=("Segoe UI", 8), anchor="w", cursor="hand2")
             lbl_ROLE.pack(fill="x")
 
-            # 
             m_frame.bind("<Button-1>", lambda e, data=m: on_member_select(data))
             lbl_NAME.bind("<Button-1>", lambda e, data=m: on_member_select(data))
             lbl_ROLE.bind("<Button-1>", lambda e, data=m: on_member_select(data))
 
-            # 
             def on_enter(e, f=m_frame): f.config(bg="#252D3D")
             def on_leave(e, f=m_frame): f.config(bg=INP)
             m_frame.bind("<Enter>", on_enter); m_frame.bind("<Leave>", on_leave)
@@ -334,11 +333,8 @@ class RideBookingApp:
         self.show_booking_form()
 
     def show_portfolio(self):
-        
         self._form_page.pack_forget()
         self._records_page.pack_forget()
-        
-        # Ipack ang portfolio page upang ito ang lumitaw
         self._portfolio_page.pack(fill="both", expand=True)
         if hasattr(self, '_status_bar'):
             self._status_bar.pack_forget()
