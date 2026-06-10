@@ -6,9 +6,9 @@ from Booking import Booking
 from booking_manager import BookingManager
 
 # Palette 
-BG   = "#0D0F14"; PANEL = "#161B24"; INP = "#1E2533"
-TEA  = "#00E5C3"; RED   = "#FF4D6A"; TXT = "#E8ECF2"; MUT = "#6B7A99"
-RODD = "#161B24"; REVEN = "#1A2030"; GOLD = "#F5A623"
+BG   = "#600404"; PANEL = "#7E0404"; INP = "#600404"
+TEA  = "#DC6D06"; RED   = "#845B5B"; TXT = "#FFFFFF"; MUT = "#F08011"
+RODD = "#E98E17"; REVEN = "#FFFFFF"; GOLD = "#E69317"
 
 VEH_DISPLAY = list(VEHICLE_LABELS.keys())
 DEFAULT_VEH = "Choose Vehicle"
@@ -18,7 +18,7 @@ class RideBookingApp:
         self.root    = root
         self.manager = BookingManager("bookings.txt")
         self.next_id = self._calc_next_id()
-        root.title("Ride — Booking System")
+        root.title("PUPMOVE - Ride Booking System")
         root.configure(bg=BG)
         root.geometry("520x650")  # Default initial size
         root.resizable(False, False)
@@ -82,22 +82,23 @@ class RideBookingApp:
         
         tk.Label(title_frame, text="PUPMOVE", bg=PANEL, fg=TEA, font=("Segoe UI", 36, "bold")).pack(side="top")
         
-        tk.Label(center_panel, text="Kesa pumila sa Pureza, i-book mo na lang 'yan.", 
+        tk.Label(center_panel, text="Kesa pumila sa Pureza, i-book mo na lang 'yan!", 
                  bg=PANEL, fg=MUT, font=("Segoe UI", 11)).pack(pady=(0, 40))
         
-        self._btn(center_panel, "BOOK A RIDE  →", self.show_main_system, bg=TEA, fg=BG).pack(ipadx=20, ipady=4)
+        self._btn(center_panel, "BOOK NA NG RIDE!  →", self.show_main_system, bg=TEA, fg=BG).pack(ipadx=20, ipady=4)
 
     # Widgets Setup for Main App
     def create_widgets(self):
         # Header 
         h = tk.Frame(self.main_app_frame, bg=BG, height=56); h.pack(fill="x"); h.pack_propagate(False)
         self._btn(h, "← BACK", self.show_welcome_page, bg=INP, fg=MUT).pack(side="left", padx=15, pady=12)
-        tk.Label(h, text="RIDE", bg=BG, fg=TXT, font=("Segoe UI", 18, "bold")).pack(side="left", padx=(14,0), pady=12)
-        tk.Label(h, text="Booking System", bg=BG, fg=MUT, font=("Segoe UI", 16, "bold")).pack(side="left", pady=14, padx=6)
-        tk.Frame(self.main_app_frame, bg="#252D3D", height=1).pack(fill="x")
+        tk.Label(h, text="PUPMOVE", bg=BG, fg=TXT, font=("Segoe UI", 18, "bold")).pack(side="left", padx=(14,0), pady=12)
+        tk.Frame(self.main_app_frame, bg="#6C0404", height=1).pack(fill="x")
 
+        self._btn(h, "👥 PORTFOLIO", self.show_portfolio, bg=INP, fg=TEA).pack(side="right", padx=15, pady=12)
+       
         # Status bar - attached to main app frame
-        tk.Frame(self.main_app_frame, bg="#252D3D", height=1).pack(side="bottom", fill="x")
+        tk.Frame(self.main_app_frame, bg="#6C0404", height=1).pack(side="bottom", fill="x")
         sf = tk.Frame(self.main_app_frame, bg=PANEL, height=28); sf.pack(side="bottom", fill="x"); sf.pack_propagate(False)
         self._status_var = tk.StringVar(value="Ready — fill in the form to book a ride.")
         tk.Label(sf, textvariable=self._status_var, bg=PANEL, fg=MUT,
@@ -105,6 +106,7 @@ class RideBookingApp:
 
         self._container.pack(fill="both", expand=True)
 
+        self._build_portfolio_page()
         self._build_form_page()
         self._build_records_page()
         self._form_page.pack(fill="both", expand=True)
@@ -119,12 +121,12 @@ class RideBookingApp:
         tk.Frame(card, bg=TEA, width=4, height=20).place(x=18, y=18)
         tk.Label(card, text="  NEW BOOKING", bg=PANEL, fg=TXT,
                  font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18,4))
-        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0,4))
+        tk.Frame(card, bg="#6C0404", height=1).pack(fill="x", padx=18, pady=(0,4))
 
         self._flabel(card, "PASSENGER NAME")
         nf = tk.Frame(card, bg=TEA); tk.Frame(nf, bg=TEA, width=3).pack(side="left", fill="y")
-        self._e_name = tk.Entry(nf, bg=INP, fg=TXT, relief="flat",
-                                font=("Segoe UI", 10), insertbackground=TEA, bd=6)
+        self._e_name = tk.Entry(nf, bg=INP, fg=TXT, relief="flat", 
+                                font=("Segoe UI", 10), insertbackground=TXT, bd=6)
         self._e_name.pack(side="left", fill="both", expand=True)
         nf.pack(fill="x", padx=20)
 
@@ -142,30 +144,30 @@ class RideBookingApp:
         veh_combo.bind("<<ComboboxSelected>>", self._on_vehicle_change)
 
         # Vehicle info panel
-        self._veh_info = tk.Frame(card, bg="#0D1A26", padx=12, pady=8)
+        self._veh_info = tk.Frame(card, bg="#FFFFFF", padx=12, pady=8)
         
-        self._veh_emoji_lbl = tk.Label(self._veh_info, text="", bg="#0D1A26", fg=TXT, font=("Segoe UI", 20))
+        self._veh_emoji_lbl = tk.Label(self._veh_info, text="", bg="#000000", fg=TXT, font=("Segoe UI", 20))
         self._veh_emoji_lbl.pack(side="left", padx=(0, 10))
         
-        veh_details = tk.Frame(self._veh_info, bg="#0D1A26")
+        veh_details = tk.Frame(self._veh_info, bg="#FFFFFF")
         veh_details.pack(side="left", fill="x", expand=True)
         
-        self._veh_name_lbl = tk.Label(veh_details, text="", bg="#0D1A26", fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w")
+        self._veh_name_lbl = tk.Label(veh_details, text="", bg="#FFFFFF", fg=TXT, font=("Segoe UI", 10, "bold"), anchor="w")
         self._veh_name_lbl.pack(fill="x")
         
        # Capacity dropdown setup
-        cap_frame = tk.Frame(veh_details, bg="#0D1A26")
+        cap_frame = tk.Frame(veh_details, bg="#FFFFFF")
         cap_frame.pack(fill="x")
         
         # Capacity label
-        tk.Label(cap_frame, text="👤 Capacity: ", bg="#0D1A26", fg=GOLD, font=("Segoe UI", 9)).pack(side="left")
+        tk.Label(cap_frame, text="👤 Capacity: ", bg="#FFFFFF", fg=GOLD, font=("Segoe UI", 9)).pack(side="left")
         
         # Capacity dropdown
         self._capacity_var = tk.StringVar()
         self._capacity_combo = ttk.Combobox(cap_frame, textvariable=self._capacity_var, state="readonly", width=6, font=("Segoe UI", 9))
         self._capacity_combo.pack(side="left", padx=5)
         
-        self._veh_rate_lbl = tk.Label(veh_details, text="", bg="#0D1A26", fg=TEA, font=("Segoe UI", 9), anchor="w")
+        self._veh_rate_lbl = tk.Label(veh_details, text="", bg="#FFFFFF", fg=TEA, font=("Segoe UI", 9), anchor="w")
         self._veh_rate_lbl.pack(fill="x")
         
         self._on_vehicle_change()
@@ -173,7 +175,7 @@ class RideBookingApp:
         self._divider = tk.Frame(card, bg="#252D3D", height=1)
         self._divider.pack(fill="x", padx=18, pady=10)
 
-        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=10)
+        tk.Frame(card, bg="#FFFFFF", height=1).pack(fill="x", padx=18, pady=10)
         self._btn(card, "✓  BOOK RIDE",  self.book_ride,    bg=TEA, fg=BG ).pack(fill="x", padx=20, pady=3)
         self._btn(card, "↺  CLEAR",      self.clear_inputs, bg=INP, fg=MUT).pack(fill="x", padx=20, pady=(3,14))
 
@@ -242,6 +244,83 @@ class RideBookingApp:
                   bg=TEA, fg=BG).pack(side="left", padx=18, pady=12)
         tk.Label(bot, text="Click ←  NEW BOOKING to go back and book another ride.",
                  bg=PANEL, fg=MUT, font=("Segoe UI", 8)).pack(side="left", padx=6)
+        
+    def _build_portfolio_page(self):
+        self._portfolio_page = tk.Frame(self._container, bg=BG)
+
+        card = tk.Frame(self._portfolio_page, bg=PANEL)
+        card.pack(fill="both", expand=True, padx=24, pady=16)
+
+        # Header Title
+        tk.Frame(card, bg=TEA, width=4, height=20).place(x=18, y=18)
+        tk.Label(card, text="  GROUP PORTFOLIO", bg=PANEL, fg=TXT,
+                 font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18,4))
+        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0,10))
+
+        # Data of each member
+        members = [
+            {
+                "NAME": "micab", 
+                "ROLE": "dsgsfgsf", 
+                "SECTION": "fgfdg"
+            },
+            {
+                "NAME": "sgfgfdf", 
+                "ROLE": "fdgdfg", 
+                "SECTION": "fdgd"
+            },
+            {
+                "NAME": "fgbfgb", 
+                "ROLE": "fgbgf", 
+                "SECTION": "gfbfgbw"
+            }
+        ]
+
+        # Detail panel
+        self._detail_box = tk.Frame(card, bg="#0D1A26", padx=15, pady=12)
+        self._detail_box.pack(side="bottom", fill="x", padx=18, pady=(5, 10))
+        
+        # Title
+        self._p_title = tk.Label(self._detail_box, text="💡 Click a member to view full profile", 
+                                 bg="#0D1A26", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
+        self._p_title.pack(fill="x", pady=(0, 4))
+        
+        self._p_info = tk.Label(self._detail_box, text="Select any developer card above to load their system profile and project contributions dynamically inside this widget.", 
+                                bg="#0D1A26", fg=TXT, font=("Segoe UI", 9), anchor="w", justify="left", wraplength=420)
+        self._p_info.pack(fill="x")
+
+        # 
+        def on_member_select(member_data):
+            # Binabago natin ang config (.config) ng mga widgets sa ibaba imbis na mag-popup window
+            self._p_title.config(text=f"👤 {member_data['NAME'].upper()} — {member_data['ROLE']}")
+            self._p_info.config(text=member_data['SECTION'])
+
+        # 
+        for m in members:
+            m_frame = tk.Frame(card, bg=INP, padx=15, pady=8, cursor="hand2")
+            m_frame.pack(fill="x", padx=18, pady=4)
+            
+            lbl_NAME = tk.Label(m_frame, text=m["NAME"], bg=INP, fg=TEA, font=("Segoe UI", 10, "bold"), anchor="w", cursor="hand2")
+            lbl_NAME.pack(fill="x")
+            
+            lbl_ROLE = tk.Label(m_frame, text=m["ROLE"], bg=INP, fg=MUT, font=("Segoe UI", 8), anchor="w", cursor="hand2")
+            lbl_ROLE.pack(fill="x")
+
+            # 
+            m_frame.bind("<Button-1>", lambda e, data=m: on_member_select(data))
+            lbl_NAME.bind("<Button-1>", lambda e, data=m: on_member_select(data))
+            lbl_ROLE.bind("<Button-1>", lambda e, data=m: on_member_select(data))
+
+            # 
+            def on_enter(e, f=m_frame): f.config(bg="#252D3D")
+            def on_leave(e, f=m_frame): f.config(bg=INP)
+            m_frame.bind("<Enter>", on_enter); m_frame.bind("<Leave>", on_leave)
+            lbl_NAME.bind("<Enter>", on_enter); lbl_NAME.bind("<Leave>", on_leave)
+            lbl_ROLE.bind("<Enter>", on_enter); lbl_ROLE.bind("<Leave>", on_leave)
+
+        # Bottom navigation elements
+        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", side="bottom", padx=18, pady=(0, 10))
+        self._btn(card, "←  BACK TO BOOKING", self.show_booking_form, bg=TEA, fg=BG).pack(fill="x", side="bottom", padx=20, pady=(0, 2))
 
     # Page switching 
     def show_welcome_page(self):
@@ -254,9 +333,23 @@ class RideBookingApp:
         self.main_app_frame.pack(fill="both", expand=True)
         self.show_booking_form()
 
-    def show_booking_form(self):
+    def show_portfolio(self):
+        
+        self._form_page.pack_forget()
         self._records_page.pack_forget()
-        self._form_page.pack(fill="both", expand=True)
+        
+        # Ipack ang portfolio page upang ito ang lumitaw
+        self._portfolio_page.pack(fill="both", expand=True)
+        if hasattr(self, '_status_bar'):
+            self._status_bar.pack_forget()
+            self._status_bar.pack(side="bottom", fill="x")
+        self.root.geometry("520x650")
+        
+    def show_booking_form(self):
+        self._portfolio_page.pack_forget()
+        if hasattr(self, '_records_page'): 
+            self._records_page.pack_forget()
+            self._form_page.pack(fill="both", expand=True)
         self.root.geometry("520x650")
 
     def show_records(self):
@@ -326,7 +419,7 @@ class RideBookingApp:
         self._on_vehicle_change()
 
     def get_next_booking_id(self):
-        bid = self.next_id; self.next_id += 1; return bid
+        bid = self.next_id; self.next_id +=     1; return bid
 
 
 if __name__ == "__main__":
