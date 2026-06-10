@@ -258,7 +258,37 @@ class RideBookingApp:
         tk.Frame(card, bg=TEA, width=4, height=20).place(x=18, y=18)
         tk.Label(card, text="  GROUP PORTFOLIO", bg=PANEL, fg=TXT,
                  font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18,4))
-        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0,10))
+        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0,10)) 
+
+        #Scrollbar
+        wrapper = tk.Frame(card, bg=PANEL)
+        wrapper.pack(fill="both", expand=True, padx=18, pady=(0,6))
+
+        canvas = tk.Canvas(wrapper, bg=PANEL, highligtthickness=0)
+        scrollbar = tk.Scrollbar(wrapper, orient="vertical", command=canvas.yview)
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        scrollbar.pack(side="right", fill="y")
+        canvas.pack(side="left", fill=" both", expand=True)
+
+        inner = tk.Frame(canvas, bg=PANEL)
+        inner_window = canvas.create_window((0,0), window=inner, anchor="nw")
+
+        #keep inner frame width sync with canvas
+        def _on_canvas_resize(event):
+            canvas.itemconfig(inner_window, width=event.width)
+        canvas.bind("<Configure>", _on_canvas_resize)
+
+        #Update scrollregion when inner frame content changes
+        inner.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        #mouse-wheel scrolling
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120 )), "units")
+
+             # Bind only when mouse is over the canvas area
+            canvas.bind("<Enter>", lambda e: canvas.bind_all("<MouseWheel>", _on_mousewheel))
+            canvas.bind("<Leave>", lambda e: canvas.unbind_all("<MouseWheel>"))
 
         # Data of each member
         members = [
