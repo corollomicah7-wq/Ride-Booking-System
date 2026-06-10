@@ -47,11 +47,10 @@ class RideBookingApp:
         s.configure("T.Treeview.Heading", background=INP, foreground=TEA,
                     relief="flat", font=("Segoe UI", 9, "bold"))
         s.map("T.Treeview", background=[("selected", "#1E3040")])
-        s.configure("TCombobox", fieldbackground="#FFFFFF", background=INP,
-                    foreground="#000000", arrowcolor=TEA, selectbackground="#FFFFFF", selectforeground="#000000")
-        s.map("TCombobox", fieldbackground=[("readonly", "#FFFFFF")],
-              foreground=[("readonly", "#000000")],
-              selectbackground=[("readonly", "#FFFFFF")], selectforeground=[("readonly", "#000000")])
+        s.configure("TCombobox", fieldbackground=TXT, background=INP,
+            foreground="#000000", arrowcolor=TEA, selectbackground=TXT, selectforeground="#000000")
+        s.map("TCombobox", fieldbackground=[("readonly", TXT)],
+      selectbackground=[("readonly", TXT)], selectforeground=[("readonly", "#000000")])
 
     def _combo(self, parent, values, var):
         f = tk.Frame(parent, bg=TEA)
@@ -125,9 +124,9 @@ class RideBookingApp:
         tk.Frame(card, bg="#6C0404", height=1).pack(fill="x", padx=18, pady=(0,4))
 
         self._flabel(card, "PASSENGER NAME")
-        nf = tk.Frame(card, bg=TEA); tk.Frame(nf, bg=TEA, width=3).pack(side="left", fill="y")
-        self._e_name = tk.Entry(nf, bg="#FFFFFF", fg="#000000", relief="flat", 
-                                font=("Segoe UI", 10), insertbackground="#000000", bd=6)
+        nf = tk.Frame(card, bg=TXT); tk.Frame(nf, bg=TXT, width=3).pack(side="left", fill="y")
+        self._e_name = tk.Entry(nf, bg=TXT, fg="#000000", relief="flat",
+                        font=("Segoe UI", 10), insertbackground="#000000", bd=6)
         self._e_name.pack(side="left", fill="both", expand=True)
         nf.pack(fill="x", padx=20)
 
@@ -153,7 +152,7 @@ class RideBookingApp:
         veh_details = tk.Frame(self._veh_info, bg="#FFFFFF")
         veh_details.pack(side="left", fill="x", expand=True)
         
-        # FIX: Changed fg from TXT (#FFFFFF) to "#000000" so it's fully visible on the white panel!
+        # Vehicle name
         self._veh_name_lbl = tk.Label(veh_details, text="", bg="#FFFFFF", fg="#000000", font=("Segoe UI", 10, "bold"), anchor="w")
         self._veh_name_lbl.pack(fill="x")
         
@@ -203,7 +202,7 @@ class RideBookingApp:
         options = vobj.get_capacity_options()
         self._veh_emoji_lbl.config(text=vobj._emoji)
         
-        # Dynamically updates the category name (e.g., MOTORCYCLE, CAR, VAN)
+        
         self._veh_name_lbl.config(text=vobj.get_type().upper())
         self._veh_rate_lbl.config(text=f"₱{vobj.get_base_fare():.0f} base  +  ₱{vobj.get_rate():.0f}/km")
         
@@ -217,12 +216,12 @@ class RideBookingApp:
 
         tb = tk.Frame(self._records_page, bg=BG)
         tb.pack(fill="x", padx=18, pady=(14,6))
-        tk.Label(tb, text="BOOKING RECORDS", bg=BG, fg=TXT,
+        tk.Label(tb, text="BOOKING RECORDS", bg=BG, fg=GOLD,
                  font=("Segoe UI", 11, "bold")).pack(side="left")
         self._cnt = tk.StringVar(value="0 bookings")
         tk.Label(tb, textvariable=self._cnt, bg=BG, fg=MUT, font=("Segoe UI", 9)).pack(side="left", padx=10)
         self._btn(tb, "⟳ REFRESH", self.refresh_table,  bg=PANEL, fg=TXT).pack(side="right", padx=(2,0))
-        self._btn(tb, "✕ CANCEL", self.cancel_booking, bg=RED, fg=TXT).pack(side="right", padx=2)
+        self._btn(tb, "✕ CANCEL", self.cancel_booking, bg=PANEL, fg=TXT).pack(side="right", padx=2)
 
         tf = tk.Frame(self._records_page, bg=BG)
         tf.pack(fill="both", expand=True, padx=18, pady=(0, 4))
@@ -238,10 +237,10 @@ class RideBookingApp:
         self._tree.pack(side="left", fill="both", expand=True)
         sb.pack(side="right", fill="y")
         self._tree.tag_configure("odd",  background=RODD)
-        self._tree.tag_configure("even", background=REVEN)
+        self._tree.tag_configure("even", background=RODD)
 
         # Back button bar 
-        tk.Frame(self._records_page, bg="#252D3D", height=1).pack(fill="x")
+        tk.Frame(self._records_page, bg="#FFFFFF", height=1).pack(fill="x")
         bot = tk.Frame(self._records_page, bg=PANEL)
         bot.pack(fill="x", side="bottom")
         self._btn(bot, "←  NEW BOOKING", self.show_booking_form,
@@ -264,20 +263,47 @@ class RideBookingApp:
         # Data of each member
         members = [
             {
-                "NAME": "micab", 
-                "ROLE": "dsgsfgsf", 
-                "SECTION": "fgfdg"
+                "NAME": "Reian A. Fortunado", 
+                "ROLE": "OOP Developer/vehicle.py file", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "1st-year Computer Engineering student who chose this program and doesn't want to be anywhere else but here."
             },
             {
-                "NAME": "sgfgfdf", 
-                "ROLE": "fdgdfg", 
-                "SECTION": "fdgd"
+                "NAME": "Gwynn O. Magpantay", 
+                "ROLE": " OOP Developer/Booking.py file", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "Babay Comp eng hello HM"
             },
             {
-                "NAME": "fgbfgb", 
-                "ROLE": "fgbgf", 
-                "SECTION": "gfbfgbw"
-            }
+                "NAME": "Karl Abijah F. Morato", 
+                "ROLE": "OOP Developer/Booking_manager.py file", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "CTRL-Z is life"
+            },
+            {
+                "NAME": "Denver James P. Quizan", 
+                "ROLE": "OOP Developer/gui.py file", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "Don't give up on your dreams keep sleeping."
+            },
+            {
+                "NAME": "Kirby Renzo F. Jardio", 
+                "ROLE": "Developer", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "Sacrifice the pawn to control the board" 
+            },
+            {
+                "NAME": "Micah L. Corollo", 
+                "ROLE": "OOP Testing/Adjusting", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "See u in 2nd Yr"
+            },
+            {
+                "NAME": "Reian A. Fortunado", 
+                "ROLE": "OOP Developer/vehicle.py file", 
+                "SECTION": "BSCpE 1-5",
+                "BIO": "dfrfr"
+            }   
         ]
 
         # Detail panel
@@ -288,14 +314,10 @@ class RideBookingApp:
         self._p_title = tk.Label(self._detail_box, text="💡 Click a member to view full profile", 
                                  bg="#7E0404", fg=GOLD, font=("Segoe UI", 10, "bold"), anchor="w")
         self._p_title.pack(fill="x", pady=(0, 4))
-        
-        self._p_info = tk.Label(self._detail_box, text="Select any developer card above to load their system profile and project contributions dynamically inside this widget.", 
-                                bg="#7E0404", fg=TXT, font=("Segoe UI", 9), anchor="w", justify="left", wraplength=420)
-        self._p_info.pack(fill="x")
 
         def on_member_select(member_data):
             self._p_title.config(text=f"👤 {member_data['NAME'].upper()} — {member_data['ROLE']}")
-            self._p_info.config(text=member_data['SECTION'])
+            self._p_info.config(text=f"{member_data['SECTION']}\n\n{member_data['BIO']}")
 
         for m in members:
             m_frame = tk.Frame(card, bg=INP, padx=15, pady=8, cursor="hand2")
