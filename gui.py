@@ -261,11 +261,6 @@ class RideBookingApp:
              font=("Segoe UI", 11, "bold")).pack(anchor="w", padx=18, pady=(18, 4))
         tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", padx=18, pady=(0, 10))
 
-    # ── Bottom section (detail box + back button) packed FIRST so it stays fixed ──
-        self._btn(card, "←  BACK TO BOOKING", self.show_booking_form,
-              bg=TEA, fg=BG).pack(fill="x", side="bottom", padx=20, pady=(0, 2))
-        tk.Frame(card, bg="#252D3D", height=1).pack(fill="x", side="bottom", padx=18, pady=(0, 10))
-
         self._detail_box = tk.Frame(card, bg="#7E0404", padx=15, pady=12)
         self._detail_box.pack(side="bottom", fill="x", padx=18, pady=(5, 10))
 
