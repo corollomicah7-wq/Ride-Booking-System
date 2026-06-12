@@ -343,11 +343,24 @@ class RideBookingApp:
             "BIO": "See u in 2nd Yr"
             },
             {
-            "NAME": "Reian A. Fortunado",
-            "ROLE": "OOP Developer/vehicle.py file",
+            "NAME": "",
+            "ROLE": "",
             "SECTION": "BSCpE 1-5",
             "BIO": "dfrfr"
+            },
+            {
+            "NAME": "Venice Andrei P. Mose",
+            "ROLE": "Research Writer / Introduction",
+            "SECTION": "BSCpE 1-5",
+            "BIO": "Proverbs 3:5"
+            },
+            {
+            "NAME": "Princess Aleeya T. Madamba",
+            "ROLE": "Research Writer / Testing & Result",
+            "SECTION": "BSCPE 1-5",
+            "BIO": "ad meliora"
             }
+            
         ]
 
         def on_member_select(member_data):
