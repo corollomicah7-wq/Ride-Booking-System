@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
 
-from vehicle import VEHICLES, VEHICLE_LABELS, KNOWN_LOCATIONS, calc_cost
+from vehicle import VEHICLES, VEHICLE_LABELS, calc_cost
+from distance_service import coordinates
 from Booking import Booking
 from booking_manager import BookingManager
 
@@ -20,7 +21,7 @@ class RideBookingApp:
         self.next_id = self._calc_next_id()
         root.title("Ride Booking")
         root.configure(bg=BG)
-        root.geometry("520x650")  # Default initial size
+        root.geometry("520x650")  
         root.resizable(False, False)
         self._setup_styles()
         
@@ -117,20 +118,38 @@ class RideBookingApp:
                  font=("Georgia", 11, "bold")).pack(anchor="w", padx=18, pady=(18,4))
         tk.Frame(card, bg="#6C0404", height=1).pack(fill="x", padx=18, pady=(0,4))
 
-        self._flabel(card, "PASSENGER NAME")
+        self._flabel(card, "CUSTOMER NAME")
         nf = tk.Frame(card, bg=TXT); tk.Frame(nf, bg=TXT, width=3).pack(side="left", fill="y")
         self._e_name = tk.Entry(nf, bg=TXT, fg="#000000", relief="flat",
                         font=("Georgia", 10), insertbackground="#000000", bd=6)
         self._e_name.pack(side="left", fill="both", expand=True)
         nf.pack(fill="x", padx=20)
 
-        self._flabel(card, "START LOCATION")
-        self._start_var = tk.StringVar(value="")
-        self._combo(card, KNOWN_LOCATIONS, self._start_var)
+        # START LOCATION
+        self._flabel(card, "PICK-UP LOCATION")
+        self._start_city_var = tk.StringVar()
+        self._start_city_combo = self._combo(card, list(coordinates.keys()), self._start_city_var)
+        self._start_city_combo.bind("<<ComboboxSelected>>", self.show_start_places)
 
-        self._flabel(card, "END LOCATION")
-        self._end_var = tk.StringVar(value="")
-        self._combo(card, KNOWN_LOCATIONS, self._end_var)
+        self._start_place_frame = tk.Frame(card, bg=PANEL)
+        self._flabel(self._start_place_frame, "PICK-UP ADDRESS")
+        self._start_var = tk.StringVar()
+        self._start_place_combo = self._combo(self._start_place_frame, [], self._start_var)
+        self._start_place_frame.pack(fill="x", padx=10, pady=(4, 0))
+        self._start_place_frame.pack_forget()
+
+        # END LOCATION
+        self._flabel(card, "DROP-OFF LOCATION")
+        self._end_city_var = tk.StringVar()
+        self._end_city_combo = self._combo(card, list(coordinates.keys()), self._end_city_var)
+        self._end_city_combo.bind("<<ComboboxSelected>>", self.show_end_places)
+
+        self._end_place_frame = tk.Frame(card, bg=PANEL)
+        self._flabel(self._end_place_frame, "DROP-OFF ADDRESS")
+        self._end_var = tk.StringVar()
+        self._end_place_combo = self._combo(self._end_place_frame, [], self._end_var)
+        self._end_place_frame.pack(fill="x", padx=10, pady=(4, 0))
+        self._end_place_frame.pack_forget()
 
         self._flabel(card, "VEHICLE TYPE")
         self._veh = tk.StringVar(value="")
@@ -177,7 +196,39 @@ class RideBookingApp:
         # View records button
         self._btn(self._form_page, "☰  VIEW BOOKING RECORDS", self.show_records,
                   bg="#DC6D06", fg=BG).pack(fill="x", padx=24, pady=(4, 16))
+        
+    def show_start_places(self, event=None):
+        city = self._start_city_var.get()
 
+        if city in coordinates:
+            locations = list(coordinates[city].keys())
+            self._start_place_combo["values"] = locations
+            if locations:
+                self._start_var.set(locations[0])
+            # Show the frame when city is selected
+            self._start_place_frame.pack(fill="x", after=self._start_city_combo.master, pady=(4, 0))
+        else:
+            # Hide if no city selected
+            self._start_var.set("")
+            self._start_place_combo["values"] = []
+            self._start_place_frame.pack_forget()
+
+    def show_end_places(self, event=None):
+        city = self._end_city_var.get()
+
+        if city in coordinates:
+            locations = list(coordinates[city].keys())
+            self._end_place_combo["values"] = locations
+            if locations:
+                self._end_var.set(locations[0])
+            # Show the frame when city is selected
+            self._end_place_frame.pack(fill="x", after = self._end_city_combo.master, pady=(4, 0))
+        else:
+            # Hide if no city selected
+            self._end_var.set("")
+            self._end_place_combo["values"] = []
+            self._end_place_frame.pack_forget()
+        
     def _on_vehicle_change(self, event=None):
         label = self._veh.get()
         vtype = VEHICLE_LABELS.get(label)
@@ -186,23 +237,39 @@ class RideBookingApp:
             self._veh_info.pack_forget() 
             return
         
-        if hasattr(self, '_divider'):
-            self._veh_info.pack(fill="x", padx=20, pady=(4, 2), before=self._divider)
-        else:
-            self._veh_info.pack(fill="x", padx=20, pady=(4, 2))
-        
-        self._veh_info.pack(fill="x", padx=20, pady=(4, 2))
+        self._veh_info.pack(fill="x", padx=20, pady=(4, 2), before=self._divider)
         
         options = vobj.get_capacity_options()
         self._veh_emoji_lbl.config(text=vobj._emoji)
-        
-        
         self._veh_name_lbl.config(text=vobj.get_type().upper())
         self._veh_rate_lbl.config(text=f"₱{vobj.get_base_fare():.0f} base  +  ₱{vobj.get_rate():.0f}/km")
         
         self._capacity_combo.config(values=options)
         if options:
             self._capacity_combo.current(0)
+
+    def update_start_locations(self, event=None):
+        city = self._start_city_var.get()
+
+        if city in coordinates:
+            locations = list(coordinates[city].keys())
+
+            self._start_city_combo["values"] = locations
+
+            if locations:
+                self._start_var.set(locations[0])
+
+
+    def update_end_locations(self, event=None):
+        city = self._end_city_var.get()
+
+        if city in coordinates:
+            locations = list(coordinates[city].keys())
+
+            self._end_location_combo["values"] = locations
+
+            if locations:
+                self._end_var.set(locations[0])
 
     # For Records page
     def _build_records_page(self):
@@ -324,7 +391,7 @@ class RideBookingApp:
             },
             {
             "NAME": "Kirby Renzo F. Jardio",
-            "ROLE": "Developer",
+            "ROLE": "OOP Developer/distance_service.py file",
             "SECTION": "BSCpE 1-5",
             "BIO": "Sacrifice the pawn to control the board"
             },
@@ -484,12 +551,24 @@ class RideBookingApp:
 
     def clear_inputs(self):
         self._e_name.delete(0, "end")
-        self._start_var.set(""); self._end_var.set("")
+        self._start_city_var.set("")
+        self._end_city_var.set("")
+
+        self._start_var.set("")
+        self._end_var.set("")
+
+        self._start_place_combo["values"] = []
+        self._end_place_combo["values"] = []
+        
+        # Hide again when clearing
+        self._start_place_frame.pack_forget()
+        self._end_place_frame.pack_forget()
+
         self._veh.set(DEFAULT_VEH)
         self._on_vehicle_change()
 
     def get_next_booking_id(self):
-        bid = self.next_id; self.next_id +=     1; return bid
+        bid = self.next_id; self.next_id += 1; return bid
 
 
 if __name__ == "__main__":
