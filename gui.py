@@ -369,7 +369,7 @@ class RideBookingApp:
             "NAME": "Reian A. Fortunado",
             "ROLE": "OOP Developer/vehicle.py file",
             "SECTION": "BSCpE 1-5",
-            "BIO": "1st-year Computer Engineering student who chose this program and doesn't want to be anywhere else but here."
+            "BIO": "1st-year Computer Engineering student who chose\nthis program and doesn't want to be anywhere else but here."
             },
             {
             "NAME": "Gwynn O. Magpantay",
@@ -402,10 +402,10 @@ class RideBookingApp:
             "BIO": "See u in 2nd Yr"
             },
             {
-            "NAME": "",
-            "ROLE": "",
+            "NAME": "Jhon Cris G. Burayag",
+            "ROLE": "Researcher—Conlusion",
             "SECTION": "BSCpE 1-5",
-            "BIO": "dfrfr"
+            "BIO": "My greatest engineering project\nwas escaping engineering"
             },
             {
             "NAME": "Venice Andrei P. Mose",
@@ -418,6 +418,18 @@ class RideBookingApp:
             "ROLE": "Research Writer / Testing & Result",
             "SECTION": "BSCPE 1-5",
             "BIO": "ad meliora"
+            },
+            {
+            "NAME": "Aljun V. Magnaye",
+            "ROLE": "Research Writer/System Design",            
+            "SECTION": "BSCpE 1-5",            
+            "BIO": "Lorem Ipsum"
+            },
+            {
+            "NAME": "Crismy G. Cunanan",
+            "ROLE": "Research Writer",
+            "SECTION": "BSCpE 1-5",
+            "BIO": " Logy"
             }
             
         ]
